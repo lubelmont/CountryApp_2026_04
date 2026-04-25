@@ -70,5 +70,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
+    // Glide
+    implementation(libs.glide)
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
 }

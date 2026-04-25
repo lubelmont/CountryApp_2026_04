@@ -15,11 +15,26 @@
     android:layout_height="wrap_content"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/btnStart"
+    app:layout_constraintBottom_toTopOf="@id/etUserPassword"
     android:layout_marginBottom="32dp"
     android:maxLines="1"
     android:singleLine="true"
+    android:hint="Email del usuario"
     />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etUserPassword"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnStart"
+        android:layout_marginBottom="32dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:inputType="textPassword"
+        android:hint="Contraseña"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnStart"
