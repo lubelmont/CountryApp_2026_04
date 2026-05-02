@@ -50,12 +50,15 @@ class MainActivity : AppCompatActivity() {
 
         val btnStart = findViewById<AppCompatButton>(R.id.btnStart)
         val etUserName = findViewById<AppCompatEditText>(R.id.etUserName)
+        val etUserPassword = findViewById<AppCompatEditText>(R.id.etUserPassword)
+
 
 
         btnStart.setOnClickListener {
             val userName = etUserName.text.toString()
-            if (userName.isNotEmpty()) {
-                searchUser(userName)
+            val userPassword = etUserPassword.text.toString()
+            if (userName.isNotEmpty() && userPassword.isNotEmpty()) {
+                searchUser(userName, userPassword)
                 return@setOnClickListener
             }
 
@@ -75,12 +78,13 @@ class MainActivity : AppCompatActivity() {
         val hashBytes = messageDigest.digest(password.toByteArray(Charsets.UTF_8))
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
-    private fun searchUser(userMail: String) {
-        val passwordTest = hashPassword(userMail)
+    private fun searchUser(userMail: String, userPassword: String) {
+        val passwordTest = hashPassword(userPassword)
         Log.d("MainActivity", "Buscando usuario: $passwordTest")
         db.collection("users")
             .whereEqualTo("email", userMail)
-            .whereEqualTo("password", hashPassword(userMail)).get()
+            .whereEqualTo("password", passwordTest)
+            .get()
             .addOnSuccessListener { result ->
 
             if(!result.isEmpty){

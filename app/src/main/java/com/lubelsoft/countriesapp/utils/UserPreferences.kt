@@ -25,6 +25,11 @@ class UserPreferences(context: Context) {
 
     val isLoggedIn : Flow<Boolean> = dataStore.data.map { it[IS_LOGGED_IN] ?: false }
 
+    fun getUserName(): Flow<String> = dataStore.data.map { it[USER_NAME] ?: "N/A" }
+    fun getUserMail(): Flow<String> = dataStore.data.map { it[USER_MAIL] ?: "N/A" }
+    fun getUserRole(): Flow<String> = dataStore.data.map { it[USER_ROLE] ?: "N/A" }
+
+
     suspend fun saveUserSession(userName: String, userMail: String, userRole: String) {
         dataStore.edit {
             it[IS_LOGGED_IN] = true

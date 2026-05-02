@@ -2,10 +2,12 @@ package com.lubelsoft.countriesapp.screens
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.lubelsoft.countriesapp.R
 import com.lubelsoft.countriesapp.adapter.CountriesAdapter
+import com.lubelsoft.countriesapp.models.Country
 import com.lubelsoft.countriesapp.services.RetrofitClient
 import com.lubelsoft.countriesapp.utils.UserPreferences
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
@@ -26,17 +30,19 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var rvCountries: RecyclerView
     private lateinit var userPreferences: UserPreferences
+    private lateinit var  searchView: SearchView
+
+    private var currentRegion = "america"
+
+    private var allCountries: List<Country> = emptyList()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawerLayout)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
 
 
         //Inicializar
@@ -45,6 +51,9 @@ class HomeActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         rvCountries = findViewById(R.id.rvCountries)
         userPreferences = UserPreferences(this)
+        searchView = findViewById(R.id.searchView)
+
+
 
 
         //Toolbar
@@ -54,15 +63,7 @@ class HomeActivity : AppCompatActivity() {
 
 
         //Datos del usuario
-        val userName = intent.getStringExtra("USER_NAME")?: "N/A"
-        val userEmail = intent.getStringExtra("USER_MAIL")?: "N/A"
 
-
-        //Configurar header del navigation
-        val headerView = navigationView.getHeaderView(0)
-
-        headerView.findViewById<TextView>(R.id.tvUserName).text = userName
-        headerView.findViewById<TextView>(R.id.tvUserEmail).text = userEmail
 
 
 
@@ -84,16 +85,26 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
+        setupContinentButtons()
+        setupSearchView()
+        loadCountriesByRegion(currentRegion)
 
-        val rvCountries = findViewById<RecyclerView>(R.id.rvCountries)
+
 
         lifecycleScope.launch {
             try {
 
-                val countries = RetrofitClient.api.getCountries()
-                val adapter = CountriesAdapter(countries)
+                val userName = getUserName();
+                val userEmail = getUserMail();
 
-                rvCountries.adapter = adapter
+
+
+                //Configurar header del navigation
+                val headerView = navigationView.getHeaderView(0)
+
+                headerView.findViewById<TextView>(R.id.tvUserName).text = userName
+                headerView.findViewById<TextView>(R.id.tvUserEmail).text = userEmail
+
 
             }catch (e: Exception){
                 Toast.makeText(this@HomeActivity, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
@@ -105,6 +116,91 @@ class HomeActivity : AppCompatActivity() {
 
 
     }
+
+    private fun setupSearchView() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // No hacemos nada al enviar la búsqueda
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                if(newText.isNullOrEmpty()){
+                    loadCountriesByRegion(currentRegion)
+                } else {
+                    filterCountries(newText)
+                }
+
+                return true
+            }
+        })
+    }
+
+    private fun filterCountries(query: String) {
+        val filteredCountries = allCountries.filter {
+            it.name.common.contains(query, ignoreCase = true) ||
+                    it.name.official.contains(query, ignoreCase = true)
+        }
+
+        rvCountries.adapter = CountriesAdapter(filteredCountries)
+    }
+
+
+    private fun loadCountriesByRegion(region: String){
+        lifecycleScope.launch {
+            try {
+                allCountries= RetrofitClient.api.getCountries(region)
+                val adapter = CountriesAdapter(allCountries)
+
+                rvCountries.adapter = adapter
+
+            }catch (e: Exception){
+                Toast.makeText(this@HomeActivity, "Error al cargar los datos", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
+    private fun setupContinentButtons(){
+        val continentMap = mapOf(
+            R.id.btnAmerica to "america",
+            R.id.btnEuropa to "europe",
+            R.id.btnAsia to "asia",
+            R.id.btnAfrica to "africa",
+            R.id.btnOceania to "oceania"
+        )
+
+        findViewById<View>(R.id.btnAmerica).isSelected = true
+
+        continentMap.forEach { (buttonId, region) ->
+            findViewById<View>(buttonId).setOnClickListener {view->
+                continentMap.keys.forEach { id->
+                    findViewById<View>(id).isSelected=false
+                }
+
+                view.isSelected = true
+
+                currentRegion = region
+                searchView.setQuery("", false)
+                loadCountriesByRegion(region)
+            }
+        }
+
+
+
+
+    }
+
+
+    private suspend fun getUserName(): String {
+        return userPreferences.getUserName().firstOrNull() ?: "N/A"
+    }
+    private suspend fun getUserMail(): String {
+        return userPreferences.getUserMail().firstOrNull() ?: "N/A"
+    }
+
+
     private fun logout() {
         lifecycleScope.launch {
             userPreferences.clearUserSession()

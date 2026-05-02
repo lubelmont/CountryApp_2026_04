@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     >
 
 
@@ -21,6 +22,210 @@
           android:background="@color/purple_200"
           android:elevation="4dp"
          />
+
+
+      <!--buscador-->
+
+      <SearchView
+          android:id="@+id/searchView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:queryHint="Buscar país..."
+          android:background="@color/white"
+          android:padding="8dp"
+          />
+
+
+      <!--Selector de continentes Menu horizontal-->
+
+      <HorizontalScrollView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+         android:scrollbars="none">
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:id="@+id/btnAmerica"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/continent_button_bg"
+                android:tag="unselected"
+                tools:ignore="UseCompoundDrawables">
+
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_america"
+                   android:layout_gravity="center"
+                   android:padding="8dp"
+                   android:contentDescription="@string/labelAmerica"
+                  />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/labelAmerica"
+                   android:layout_gravity="center"
+                   android:textSize="12sp"
+                   android:textStyle="bold"
+                   android:layout_marginTop="4dp"
+                  />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnEuropa"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:tag="unselected"
+                android:background="@drawable/continent_button_bg"
+                tools:ignore="UseCompoundDrawables">
+
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_europa"
+                   android:layout_gravity="center"
+                   android:padding="8dp"
+                   android:contentDescription="@string/labelEuropa"
+                   />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/labelEuropa"
+                   android:layout_gravity="center"
+                   android:textSize="12sp"
+                   android:textStyle="bold"
+                   android:layout_marginTop="4dp"
+                   />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnAsia"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:tag="unselected"
+                android:background="@drawable/continent_button_bg"
+                tools:ignore="UseCompoundDrawables">
+
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_asia"
+                   android:layout_gravity="center"
+                   android:padding="8dp"
+                   android:contentDescription="@string/labelAsia"
+                   />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/labelAsia"
+                   android:layout_gravity="center"
+                   android:textSize="12sp"
+                   android:textStyle="bold"
+                   android:layout_marginTop="4dp"
+                   />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnAfrica"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:tag="unselected"
+                android:background="@drawable/continent_button_bg"
+                tools:ignore="UseCompoundDrawables">
+
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_africa"
+                   android:layout_gravity="center"
+                   android:padding="8dp"
+                   android:contentDescription="@string/labelAfrica"
+                   />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/labelAfrica"
+                   android:layout_gravity="center"
+                   android:textSize="12sp"
+                   android:textStyle="bold"
+                   android:layout_marginTop="4dp"
+                   />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnOceania"
+                android:layout_width="80dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:tag="unselected"
+                android:background="@drawable/continent_button_bg"
+                tools:ignore="UseCompoundDrawables">
+
+               <ImageView
+                   android:layout_width="40dp"
+                   android:layout_height="40dp"
+                   android:src="@drawable/ic_oceania"
+                   android:layout_gravity="center"
+                   android:padding="8dp"
+                   android:contentDescription="@string/labelOceania"
+                   />
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/labelOceania"
+                   android:layout_gravity="center"
+                   android:textSize="12sp"
+                   android:textStyle="bold"
+                   android:layout_marginTop="4dp"
+                   />
+
+
+            </LinearLayout>
+
+
+         </LinearLayout>
+
+
+
+      </HorizontalScrollView>
+
 
 
       <androidx.recyclerview.widget.RecyclerView

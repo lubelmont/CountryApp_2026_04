@@ -1,5 +1,6 @@
 package com.lubelsoft.countriesapp.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.lubelsoft.countriesapp.R
 import com.lubelsoft.countriesapp.models.Country
+import com.lubelsoft.countriesapp.screens.CountryDeatailActivity
 
 class CountriesAdapter(private val countries: List<Country>) :
     RecyclerView.Adapter<CountriesAdapter.CountryViewHolder>() {
@@ -25,6 +27,12 @@ class CountriesAdapter(private val countries: List<Country>) :
             Glide.with(itemView.context)
                 .load(country.flags.png)
                 .into(flag)
+
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, CountryDeatailActivity::class.java)
+                intent.putExtra("country", country)
+                itemView.context.startActivity(intent)
+            }
         }
     }
 
